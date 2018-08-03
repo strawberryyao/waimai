@@ -1,5 +1,21 @@
-import {RECEIVE_ADDRESS,RECEIVE_CATEGORY,RECEIVE_SHOPS} from "./mutations-type";
-import {reqAddress,reqCategorys,reqShops} from "../api";
+import {RECEIVE_ADDRESS,
+        RECEIVE_CATEGORY,
+        RECEIVE_SHOPS,
+        RECEIVE_USER,
+        RESET_USER,
+        RECEIVE_GOODS,
+        RECEIVE_RATINGS,
+        RECEIVE_INFO
+        } from "./mutations-type";
+import {reqAddress,
+        reqCategorys,
+        reqShops,
+        reqUser,
+        reqLogout,
+        reqGoods,
+        reqInfo,
+        reqRatings
+      } from "../api";
 
 export default {
   //异步获取当前地址
@@ -28,5 +44,45 @@ export default {
       const shops = result.data;
       commit(RECEIVE_SHOPS,{shops})
     }
+  },
+  saveUser({commit},user){
+   commit(RECEIVE_USER,{user})
+  },
+
+  async getUser({commit}){
+    const result = await reqUser();
+    if(result.code===0){
+      console.log(result);
+      const user = result.data;
+      commit(RECEIVE_USER,{user})
+    }
+  },
+  async logout({commit}){
+    const result = await reqLogout();
+    if(result.code===0){
+      commit(RESET_USER)
+    }
+  },
+  async getGoods({commit,state}){
+    const result = await reqGoods();
+    if(result.code===0){
+      const goods = result.data;
+      commit(RECEIVE_GOODS,{goods})
+    }
+  },
+  async getRatings({commit,state}){
+    const result = await reqRatings();
+    if(result.code===0){
+      const ratings = result.data;
+      commit(RECEIVE_RATINGS,{ratings})
+    }
+  },
+  async getInfo({commit,state}){
+    const result = await reqInfo();
+    if(result.code===0){
+      const info = result.data;
+      commit(RECEIVE_INFO,{info})
+    }
   }
+
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="app">
     <router-view></router-view>
     <FooterGuide  v-show="$route.meta.showFoot"/>
   </div>
@@ -10,7 +10,8 @@
   export default {
     mounted () {
       // 异步获取当前地址信息
-      this.$store.dispatch('getAddress')
+      this.$store.dispatch('getAddress');
+      this.$store.dispatch('getUser');
     },
     components: {
       FooterGuide

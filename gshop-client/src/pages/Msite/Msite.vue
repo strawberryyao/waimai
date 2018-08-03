@@ -24,14 +24,14 @@
       <nav class="msite_nav">
         <div class="swiper-container">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <a href="javascript:" class="link_to_food">
+            <div class="swiper-slide" v-for="(categorys,index) in categorysArr" :key="index" >
+              <a href="javascript:" class="link_to_food" v-for="(category,index) in categorys" :key="index">
                 <div class="food_container">
-                  <img src="./images/nav/1.jpg">
+                  <img :src=" baseImgUrl+category.image_url">
                 </div>
-                <span>甜品饮品</span>
+                <span>{{category.title}}</span>
               </a>
-              <a href="javascript:" class="link_to_food">
+             <!-- <a href="javascript:" class="link_to_food">
                 <div class="food_container">
                   <img src="./images/nav/2.jpg">
                 </div>
@@ -72,9 +72,9 @@
                   <img src="./images/nav/8.jpg">
                 </div>
                 <span>土豪推荐</span>
-              </a>
+              </a>-->
             </div>
-            <div class="swiper-slide">
+            <!--<div class="swiper-slide">
               <a href="javascript:" class="link_to_food">
                 <div class="food_container">
                   <img src="./images/nav/9.jpg">
@@ -123,7 +123,7 @@
                 </div>
                 <span>土豪推荐</span>
               </a>
-            </div>
+            </div>-->
           </div>
           <!-- Add Pagination -->
           <div class="swiper-pagination"></div>
@@ -148,20 +148,49 @@
   import ShopList from '../../components/ShopList/ShopList'
 
   export default {
+    data(){
+      return {
+        baseImgUrl: 'https://fuss10.elemecdn.com'
+      }
+    },
     computed:{
       ...mapState(['address','categorys']),
       //通过创建二维数组来动态生成轮播的商品分类，二位数组里面的每个数组来保存每页轮播的数据
+      categorysArr(){
+        //二维大数组
+        const arr = [];
+        //内部数组
+        let smallArr = [];
+        this.categorys.forEach(category=> {
+          if(smallArr.length===0){
+            arr.push(smallArr);
+          }
+          smallArr.push(category);
+          if(smallArr.length===8){
+            smallArr = [];
+          }
+        })
+        return arr
+      }
     },
     mounted(){
       this.$store.dispatch('getShops');
       this.$store.dispatch('getCategorys');
 
-      new Swiper('.swiper-container', {
-        loop: true, // 循环轮播
-        pagination: {  // 分页器
-          el: '.swiper-pagination',
-        },
-      })
+
+    },
+    watch:{
+      categorys(val){
+        this.$nextTick(()=>{
+          //$nextTick可以保证页面的DOM在数据更新渲染以后才会执行Swiper
+          new Swiper('.swiper-container', {
+            loop: true, // 循环轮播
+            pagination: {  // 分页器
+              el: '.swiper-pagination',
+            },
+          })
+        })
+      }
     },
     components:{
       HeaderTop,
