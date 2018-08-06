@@ -7,5 +7,6 @@ export default {
   user:{},
   goods:[],
   ratings:[],
-  info:{}
+  info:{},
+  cartFoods:[]    //购物车每项food的数组
 }

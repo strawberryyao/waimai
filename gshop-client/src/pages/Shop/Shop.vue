@@ -35,6 +35,7 @@
     height 40px
     line-height 40px
     bottom-border-1px(rgba(7, 17, 27, 0.1))
+    background #fff
     .tab-item
       float left
       width: 33.33333%

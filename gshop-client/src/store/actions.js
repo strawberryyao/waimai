@@ -5,7 +5,9 @@ import {RECEIVE_ADDRESS,
         RESET_USER,
         RECEIVE_GOODS,
         RECEIVE_RATINGS,
-        RECEIVE_INFO
+        RECEIVE_INFO,
+        INCREMENT_FOOD_COUNT,
+        DECREMENT_FOOD_COUNT
         } from "./mutations-type";
 import {reqAddress,
         reqCategorys,
@@ -36,7 +38,7 @@ export default {
       commit(RECEIVE_CATEGORY,{categorys})
     }
   },
-
+//异步获取店家信息
   async getShops({commit,state}){
     const {latitude,longitude} = state;
     const result = await reqShops(latitude,longitude);
@@ -63,18 +65,20 @@ export default {
       commit(RESET_USER)
     }
   },
-  async getGoods({commit,state}){
+  async getGoods({commit,state},cb){
     const result = await reqGoods();
     if(result.code===0){
       const goods = result.data;
       commit(RECEIVE_GOODS,{goods})
+      cb && cb()
     }
   },
-  async getRatings({commit,state}){
+  async getRatings({commit,state},cb){
     const result = await reqRatings();
     if(result.code===0){
       const ratings = result.data;
       commit(RECEIVE_RATINGS,{ratings})
+      cb && cb()
     }
   },
   async getInfo({commit,state}){
@@ -82,6 +86,14 @@ export default {
     if(result.code===0){
       const info = result.data;
       commit(RECEIVE_INFO,{info})
+    }
+  },
+  //同步更新购物车商品数量
+  updateFoodCount({commit,state},{food,isAdd}){
+    if(isAdd){
+      commit(INCREMENT_FOOD_COUNT,{food})
+    }else{
+      commit(DECREMENT_FOOD_COUNT,{food})
     }
   }
 
