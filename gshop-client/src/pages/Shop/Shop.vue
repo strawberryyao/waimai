@@ -12,7 +12,11 @@
         <router-link to="/shop/info" replace>商家</router-link>
       </div>
     </div>
-    <router-view/>
+    <!--保存购物车的状态-->
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
+
   </div>
 </template>
 
